@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -25,6 +27,19 @@ public class CraftingListener implements Listener {
 
     private final List<CustomShapelessRecipe> shapelessRecipes = new ArrayList<>();
     private final List<CustomShapedRecipe> shapedRecipes = new ArrayList<>();
+    
+    @EventHandler
+    public void onPrepareItemCraft(PrepareItemCraftEvent event) {
+        for (ItemStack item : event.getInventory()) {
+            if (item == null || item.getItemMeta() == null) {
+                continue;
+            }
+            final List<String> lore = item.getItemMeta().getLore();
+            if (lore != null && !lore.isEmpty() && lore.get(0).equals(ChatColor.DARK_AQUA + "Devathon item")) {
+                event.getInventory().setResult(new ItemStack(Material.AIR));
+            }
+        }
+    }
 
     @EventHandler
     public void onCustomCraftPrepare(InventoryClickEvent event) {
