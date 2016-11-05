@@ -36,7 +36,7 @@ public class DevathonPlugin extends JavaPlugin {
         craftingListener = new CraftingListener();
         getServer().getPluginManager().registerEvents(craftingListener, this);
         getServer().getPluginManager().registerEvents(new CustomBlockListener(this), this);
-        blockManager = new BlockManager();
+        blockManager = new BlockManager(this);
         registerCraftingRecipes();
     }
 

@@ -4,6 +4,7 @@ import gnu.trove.map.hash.THashMap;
 import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.devathon.contest2016.blocks.CoffeeGrinder;
 import org.devathon.contest2016.blocks.CoffeeMachine;
@@ -15,7 +16,12 @@ import org.devathon.contest2016.blocks.CustomBlock;
  */
 public class BlockManager {
     
+    private final DevathonPlugin plugin;
     private final Map<Location, CustomBlock> blockLocations = new THashMap<>();
+
+    public BlockManager(DevathonPlugin plugin) {
+        this.plugin = plugin;
+    }
 
     public boolean registerBlock(ItemStack itemInHand, Block blockPlaced) {
         final CustomBlock block;
@@ -30,8 +36,16 @@ public class BlockManager {
                 return true;
         }
         blockLocations.put(blockPlaced.getLocation(), block);
-        //todo: save in yml file
+        getConfig().set(locationString(blockPlaced.getLocation()), itemInHand.getItemMeta().getDisplayName());
         return false;
+    }
+    
+    private ConfigurationSection getConfig() {
+        return plugin.getDevathonConfig().getConfigurationSection("blocks");
+    }
+
+    private String locationString(Location location) {
+        return location.getWorld()+ ";" + location.getBlockX() + ";" + location.getBlockY() + ";" + location.getBlockZ();
     }
 
 }
