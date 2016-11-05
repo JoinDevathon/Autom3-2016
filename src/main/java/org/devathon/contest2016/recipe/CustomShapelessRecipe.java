@@ -7,7 +7,6 @@ import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import org.devathon.contest2016.CustomMaterial;
 
 /**
  *

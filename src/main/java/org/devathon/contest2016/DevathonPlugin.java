@@ -1,5 +1,7 @@
 package org.devathon.contest2016;
 
+import org.devathon.contest2016.recipe.CustomMaterial;
+import org.devathon.contest2016.listeners.CraftingListener;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
@@ -32,6 +34,14 @@ public class DevathonPlugin extends JavaPlugin {
         final ItemStack bean = CustomMaterial.COFFEE_BEAN.getItem();
         bean.setAmount(2);
         craftingListener.registerCraftingRecipe(new CustomShapelessRecipe(bean).addIngredient(CustomMaterial.COFFEE_BEAN).addIngredient(Material.INK_SACK, 3));
+        craftingListener.registerCraftingRecipe(new CustomShapedRecipe(CustomMaterial.COFFEE_MACHINE.getItem(),
+                item(Material.COBBLESTONE), CustomMaterial.COFFEE_BEAN.getItem(), item(Material.COBBLESTONE),
+                item(Material.COBBLESTONE), item(Material.FURNACE), item(Material.COBBLESTONE),
+                item(Material.COBBLESTONE), item(Material.IRON_FENCE), item(Material.COBBLESTONE)));
+        craftingListener.registerCraftingRecipe(new CustomShapedRecipe(CustomMaterial.COFFEE_MUG.getItem(),
+                item(Material.STONE), CustomMaterial.COFFEE_BEAN.getItem(), item(Material.STONE),
+                item(Material.STONE), item(Material.FLOWER_POT_ITEM), item(Material.STONE),
+                item(Material.STONE), item(Material.STONE), item(Material.STONE)));
     }
 
     private ItemStack item(Material material) {

@@ -1,4 +1,4 @@
-package org.devathon.contest2016;
+package org.devathon.contest2016.listeners;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +103,7 @@ public class CraftingListener implements Listener {
     private void craftItem(HumanEntity player, Inventory inventory, ItemStack result) {
         inventory.clear();
         player.setItemOnCursor(null);
-        player.getWorld().dropItemNaturally(player.getLocation().clone().add(player.getLocation().getDirection()), result);
+        player.getWorld().dropItemNaturally(player.getLocation(), result);
         player.closeInventory();
     }
 

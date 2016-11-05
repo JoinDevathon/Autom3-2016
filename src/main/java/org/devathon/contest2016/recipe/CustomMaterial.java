@@ -1,4 +1,4 @@
-package org.devathon.contest2016;
+package org.devathon.contest2016.recipe;
 
 import java.util.Arrays;
 import org.bukkit.ChatColor;
@@ -14,7 +14,8 @@ public enum CustomMaterial {
     
     COFFEE_BEAN(Material.INK_SACK, 3, "Coffee Bean"),
     COFFEE_GRINDER(Material.HOPPER, 0, "Coffee Grinder"),
-    COFFEE_MACHINE(Material.FURNACE, 0, "Coffee Machine")
+    COFFEE_MACHINE(Material.FURNACE, 0, "Coffee Machine"),
+    COFFEE_MUG(Material.FLOWER_POT_ITEM, 0,"Coffee Mug")
     ;
     
     private final Material material;
