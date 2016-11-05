@@ -6,12 +6,12 @@ public class DevathonPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // put your enable code here
+        getLogger().info("Woo! Machines activate!");
     }
 
     @Override
     public void onDisable() {
-        // put your disable code here
+        getLogger().info("Beep boop. Shutting down...");
     }
 }
 
