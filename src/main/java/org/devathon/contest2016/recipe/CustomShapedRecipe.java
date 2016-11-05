@@ -23,7 +23,7 @@ public class CustomShapedRecipe implements Recipe {
 
     @Override
     public ItemStack getResult() {
-        return result;
+        return result.clone();
     }
 
 }

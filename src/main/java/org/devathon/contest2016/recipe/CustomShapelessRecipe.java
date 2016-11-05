@@ -1,7 +1,9 @@
 package org.devathon.contest2016.recipe;
 
+import gnu.trove.map.hash.THashMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -35,13 +37,25 @@ public class CustomShapelessRecipe implements Recipe {
         return this;
     }
 
+    public Map<ItemStack, Integer> getIngredientAmounts() {
+        final Map<ItemStack, Integer> amounts = new THashMap<>();
+        for (ItemStack ingredient : ingredients) {
+            Integer amount = amounts.get(ingredient);
+            if (amount == null) {
+                amount = 0;
+            }
+            amounts.put(ingredient, amount + 1);
+        }
+        return amounts;
+    }
+
     public List<ItemStack> getIngredients() {
         return ingredients;
     }
 
     @Override
     public ItemStack getResult() {
-        return result;
+        return result.clone();
     }
 
 }
