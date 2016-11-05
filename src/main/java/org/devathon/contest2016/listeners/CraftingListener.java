@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.devathon.contest2016.DevathonPlugin;
 import org.devathon.contest2016.recipe.CustomShapedRecipe;
 import org.devathon.contest2016.recipe.CustomShapelessRecipe;
 
@@ -36,7 +37,7 @@ public class CraftingListener implements Listener {
                 continue;
             }
             final List<String> lore = item.getItemMeta().getLore();
-            if (lore != null && !lore.isEmpty() && lore.get(0).equals(ChatColor.DARK_AQUA + "Devathon item")) {
+            if (lore != null && !lore.isEmpty() && lore.get(0).equals(DevathonPlugin.NAME)) {
                 customCraft = true;
                 break;
             }

@@ -1,28 +1,98 @@
 package org.devathon.contest2016;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import org.bukkit.ChatColor;
 import org.devathon.contest2016.recipe.CustomMaterial;
 import org.devathon.contest2016.listeners.CraftingListener;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.devathon.contest2016.listeners.CustomBlockListener;
 import org.devathon.contest2016.recipe.CustomShapedRecipe;
 import org.devathon.contest2016.recipe.CustomShapelessRecipe;
 
 public class DevathonPlugin extends JavaPlugin {
 
-    private final CraftingListener craftingListener = new CraftingListener();
+    public static final String NAME = ChatColor.DARK_AQUA + "Devathon item";
+    private CraftingListener craftingListener;
+    private BlockManager blockManager;
+    private FileConfiguration devathonConfig = null;
+    private File devathonConfigFile = null;
 
     @Override
     public void onEnable() {
         getLogger().info("Woo! Machines activate!");
+        saveDefaultConfig();
+        saveDefaultDevathonConfig();
+        
+        craftingListener = new CraftingListener();
         getServer().getPluginManager().registerEvents(craftingListener, this);
+        getServer().getPluginManager().registerEvents(new CustomBlockListener(this), this);
+        blockManager = new BlockManager();
         registerCraftingRecipes();
     }
 
     @Override
     public void onDisable() {
         getLogger().info("Beep boop. Shutting down...");
+        devathonConfig = null;
+        devathonConfigFile = null;
+    }
+
+    public BlockManager getBlockManager() {
+        return blockManager;
+    }
+    
+    public void reloadDevathonConfig() {
+        if (devathonConfigFile == null) {
+            devathonConfigFile = new File(getDataFolder(), "devathon.yml");
+        }
+        devathonConfig = YamlConfiguration.loadConfiguration(devathonConfigFile);
+
+        // Look for defaults in the jar
+        Reader defConfigStream;
+        try {
+            defConfigStream = new InputStreamReader(this.getResource("devathon.yml"), "UTF8");
+            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+            devathonConfig.setDefaults(defConfig);
+        } catch (UnsupportedEncodingException ex) {
+            getLogger().log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public FileConfiguration getDevathonConfig() {
+        if (devathonConfig == null) {
+            reloadDevathonConfig();
+        }
+        return devathonConfig;
+    }
+
+    public void saveDevathonConfig() {
+        if (devathonConfig == null || devathonConfigFile == null) {
+            return;
+        }
+        try {
+            getDevathonConfig().save(devathonConfigFile);
+        } catch (IOException ex) {
+            getLogger().log(Level.SEVERE, "Could not save config to " + devathonConfigFile, ex);
+        }
+    }
+
+    private void saveDefaultDevathonConfig() {
+        if (devathonConfigFile == null) {
+            devathonConfigFile = new File(getDataFolder(), "devathon.yml");
+        }
+        if (!devathonConfigFile.exists()) {
+            saveResource("devathon.yml", false);
+        }
     }
 
     private void registerCraftingRecipes() {
