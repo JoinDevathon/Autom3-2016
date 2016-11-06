@@ -65,15 +65,10 @@ public class CustomBlockListener implements Listener {
             return;
         }
 
-        Hopper hopper = (Hopper) event.getInventory().getHolder();
-        CustomBlock customBlock = plugin.getBlockManager().getCustomBlock(hopper.getBlock().getLocation());
-        if (customBlock == null || !(customBlock instanceof CoffeeGrinder)) {
-            return;
+        CustomBlock customBlock = plugin.getBlockManager().getCustomBlock(((Hopper) event.getInventory().getHolder()).getBlock().getLocation());
+        if (customBlock != null && customBlock instanceof CoffeeGrinder) {
+            event.setCancelled(true);
         }
-        
-        CoffeeGrinder coffeeGrinder = (CoffeeGrinder) customBlock;
-        coffeeGrinder.pickup(event.getItem());
-        event.setCancelled(true);
     }
 
 }

@@ -2,6 +2,7 @@ package org.devathon.contest2016.blocks;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 import org.devathon.contest2016.BlockManager;
 
 /**
@@ -26,6 +27,10 @@ public class CoffeeMachine extends CustomBlock {
 
     @Override
     public boolean activate() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void pass(ItemStack item) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
