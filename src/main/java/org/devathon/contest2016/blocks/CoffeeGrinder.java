@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -23,7 +24,6 @@ import org.devathon.contest2016.recipe.CustomMaterial;
  */
 public class CoffeeGrinder extends CustomBlock {
 
-    private static final int time = 1;
     private final Hopper hopper;
     private boolean active = false;
 
@@ -103,7 +103,7 @@ public class CoffeeGrinder extends CustomBlock {
             player.stopSound(Sound.ENTITY_WOLF_GROWL);
             player.getNearbyEntities(50, 50, 50).stream().filter(entity -> entity.getType() == EntityType.PLAYER)
                     .forEach(entity -> ((Player) entity).stopSound(Sound.ENTITY_WOLF_GROWL));
-        }, time * 20);
+        }, getConfig().getInt("time"));
         return true;
     }
 
@@ -130,6 +130,10 @@ public class CoffeeGrinder extends CustomBlock {
         }
 
         hopper.getWorld().dropItem(hopper.getLocation().clone().add(0.5, -0.5, 0.5), item);
+    }
+
+    private ConfigurationSection getConfig() {
+        return manager.getPlugin().getConfig().getConfigurationSection("grinder");
     }
 
 }

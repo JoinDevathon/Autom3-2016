@@ -1,0 +1,15 @@
+grinder:
+    #time in ticks
+    time: 60
+
+machine:
+    #time in ticks
+    time: 200
+
+coffee:
+    #hunger points (20 total)
+    hunger: 3
+    #saturation points (20 total)
+    saturation: 4
+    #coffee 'durability' decrease per drink (100 total)
+    decrease: 10

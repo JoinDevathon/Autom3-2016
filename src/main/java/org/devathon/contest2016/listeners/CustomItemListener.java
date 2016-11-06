@@ -1,6 +1,7 @@
 package org.devathon.contest2016.listeners;
 
 import org.bukkit.Sound;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -16,9 +17,6 @@ import org.devathon.contest2016.recipe.CustomMaterial;
  */
 public class CustomItemListener implements Listener {
 
-    private static final int foodPoints = 3;
-    private static final int saturationPoints = 3;
-    private static final int decrease = 10;
     private final DevathonPlugin plugin;
 
     public CustomItemListener(DevathonPlugin plugin) {
@@ -39,10 +37,10 @@ public class CustomItemListener implements Listener {
             remaining = Integer.parseInt(itemMeta.getDisplayName().substring(coffeeName.length() + 2, itemMeta.getDisplayName().length() - 2));
         }
 
-        remaining -= decrease;
+        remaining -= getConfig().getInt("decrease");
 
-        event.getPlayer().setFoodLevel(event.getPlayer().getFoodLevel() + (int) (foodPoints * remaining >= 0 ? 1 : (-1.0 / remaining)));
-        event.getPlayer().setSaturation(event.getPlayer().getSaturation() + (int) (saturationPoints * remaining >= 0 ? 1 : (-1.0 / remaining)));
+        event.getPlayer().setFoodLevel(event.getPlayer().getFoodLevel() + (int) (getConfig().getInt("hunger") * remaining >= 0 ? 1 : (-1.0 / remaining)));
+        event.getPlayer().setSaturation(event.getPlayer().getSaturation() + (int) (getConfig().getInt("saturation") * remaining >= 0 ? 1 : (-1.0 / remaining)));
 
         if (remaining > 0) {
             itemMeta.setDisplayName(coffeeName + " (" + remaining + "%)");
@@ -51,7 +49,11 @@ public class CustomItemListener implements Listener {
             event.getPlayer().getInventory().remove(event.getItem());
         }
         event.getPlayer().updateInventory();
-        event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.ENTITY_GENERIC_DRINK, 1, 1);
+        event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.ENTITY_GENERIC_DRINK, 0.5f, 0.7f);
+    }
+
+    private ConfigurationSection getConfig() {
+        return plugin.getConfig().getConfigurationSection("coffee");
     }
 
 }

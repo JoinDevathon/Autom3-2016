@@ -31,7 +31,7 @@ public class DevathonPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        //saveDefaultConfig();
+        saveDefaultConfig();
         saveDefaultDevathonConfig();
         
         craftingListener = new CraftingListener();

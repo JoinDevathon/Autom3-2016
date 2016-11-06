@@ -6,6 +6,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Furnace;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -23,7 +24,6 @@ import org.devathon.contest2016.recipe.CustomMaterial;
  */
 public class CoffeeMachine extends CustomBlock {
 
-    private static final int time = 1;
     private final Furnace furnace;
     private final Block relative;
     private boolean active = false;
@@ -78,8 +78,7 @@ public class CoffeeMachine extends CustomBlock {
             return true;
         }
 
-        furnace.setBurnTime((short) time);
-        furnace.setCookTime((short) time);
+        furnace.setBurnTime((short) (getConfig().getInt("time")));
 
         active = true;
         button.setPowered(true);
@@ -99,7 +98,7 @@ public class CoffeeMachine extends CustomBlock {
             player.stopSound(Sound.BLOCK_LAVA_POP);
             player.getNearbyEntities(50, 50, 50).stream().filter(entity -> entity.getType() == EntityType.PLAYER)
                     .forEach(entity -> ((Player) entity).stopSound(Sound.BLOCK_LAVA_POP));
-        }, time * 20);
+        }, getConfig().getInt("time"));
         return true;
     }
 
@@ -108,15 +107,15 @@ public class CoffeeMachine extends CustomBlock {
         if (!(event.getClickedInventory() instanceof FurnaceInventory)) {
             return false;
         }
-        
+
         if (event.getSlotType() == SlotType.CRAFTING && !CustomMaterial.GROUND_COFFEE_BEANS.equals(event.getCursor())) {
             return true;
         }
-        
+
         if (event.getSlotType() == SlotType.FUEL && !CustomMaterial.MUG.equals(event.getCurrentItem())) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -162,6 +161,10 @@ public class CoffeeMachine extends CustomBlock {
         }
 
         furnace.getInventory().setResult(CustomMaterial.COFFEE.getItem());
+    }
+
+    private ConfigurationSection getConfig() {
+        return manager.getPlugin().getConfig().getConfigurationSection("machine");
     }
 
 }
