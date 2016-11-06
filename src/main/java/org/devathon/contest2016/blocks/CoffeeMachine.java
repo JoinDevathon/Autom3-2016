@@ -8,6 +8,7 @@ import org.bukkit.block.Furnace;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Button;
 import org.devathon.contest2016.BlockManager;
+import org.devathon.contest2016.recipe.CustomMaterial;
 
 /**
  *
@@ -15,6 +16,7 @@ import org.devathon.contest2016.BlockManager;
  */
 public class CoffeeMachine extends CustomBlock {
 
+    private static final int time = 1;
     private final Furnace furnace;
     private final Block relative;
     private boolean active = false;
@@ -22,6 +24,7 @@ public class CoffeeMachine extends CustomBlock {
     public CoffeeMachine(BlockManager manager, Block block) {
         super(manager, block);
         furnace = (Furnace) block.getState();
+        //thanks @Scarsz lol#4227  :)
         relative = block.getRelative(((org.bukkit.material.Furnace) furnace.getData()).getFacing());
     }
 
@@ -32,7 +35,6 @@ public class CoffeeMachine extends CustomBlock {
 
     @Override
     public Location getActivatorLocation() {
-        //thanks scarsz :)
         return relative.getLocation();
     }
 
@@ -48,9 +50,13 @@ public class CoffeeMachine extends CustomBlock {
             return false;
         }
 
-        if (active) {
+        if (active || furnace.getInventory().getSmelting() == null || !CustomMaterial.GROUND_COFFEE_BEANS.equals(furnace.getInventory().getSmelting())
+                || furnace.getInventory().getResult() != null) {
             return true;
         }
+        
+        furnace.setBurnTime((short) time);
+        furnace.setCookTime((short) time);
 
         active = true;
         button.setPowered(true);
@@ -63,7 +69,7 @@ public class CoffeeMachine extends CustomBlock {
 
             button.setPowered(false);
             state.update(true);
-        }, 20);
+        }, time * 20);
         return true;
     }
 
@@ -72,7 +78,29 @@ public class CoffeeMachine extends CustomBlock {
     }
 
     private void process() {
+        final ItemStack smelting = furnace.getInventory().getSmelting();
+        if (smelting == null || !CustomMaterial.GROUND_COFFEE_BEANS.equals(smelting)) {
+            return;
+        }
         
+        final int smeltingAmount = smelting.getAmount();
+        if (smeltingAmount == 1) {
+            furnace.getInventory().setSmelting(null);
+        } else {
+            smelting.setAmount(smeltingAmount - 1);
+            //furnace.getInventory().setSmelting(smelting);
+        }
+        
+        final ItemStack fuel = furnace.getInventory().getFuel();
+        final int fuelAmount = fuel.getAmount();
+        if (fuelAmount == 1) {
+            furnace.getInventory().setSmelting(null);
+        } else {
+            fuel.setAmount(fuelAmount - 1);
+            //furnace.getInventory().setFuel(fuel);
+        }
+        
+        furnace.getInventory().setResult(CustomMaterial.COFFEE.getItem());
     }
 
 }
