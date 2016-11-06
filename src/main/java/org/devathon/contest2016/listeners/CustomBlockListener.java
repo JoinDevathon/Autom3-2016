@@ -38,7 +38,7 @@ public class CustomBlockListener implements Listener {
             return;
         }
 
-        event.setCancelled(plugin.getBlockManager().registerBlock(event.getItemInHand(), event.getBlockPlaced()));
+        event.setCancelled(plugin.getBlockManager().registerBlock(event.getItemInHand().getItemMeta().getDisplayName(), event.getBlockPlaced(), true));
     }
 
     @EventHandler

@@ -7,10 +7,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.devathon.contest2016.DevathonPlugin;
-import org.devathon.contest2016.blocks.CustomBlock;
 import org.devathon.contest2016.recipe.CustomMaterial;
 
 /**

@@ -3,11 +3,10 @@ package org.devathon.contest2016;
 import gnu.trove.map.hash.THashMap;
 import java.util.Map;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.inventory.ItemStack;
 import org.devathon.contest2016.blocks.CoffeeGrinder;
 import org.devathon.contest2016.blocks.CoffeeMachine;
 import org.devathon.contest2016.blocks.CustomBlock;
@@ -24,11 +23,20 @@ public class BlockManager {
 
     public BlockManager(DevathonPlugin plugin) {
         this.plugin = plugin;
+        final ConfigurationSection config = getConfig();
+        for (String key : config.getKeys(false)) {
+            String string = config.getString(key + ".name");
+            String[] split = key.split(";");
+            Block block = plugin.getServer().getWorld(split[0]).getBlockAt(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]));
+            block.setType(Material.valueOf(config.getString(key + ".type")));
+            block.setData(Byte.parseByte(config.getString(key + ".data")));
+            registerBlock(string, block, false);
+        }
     }
 
-    public boolean registerBlock(ItemStack itemInHand, Block blockPlaced) {
+    public final boolean registerBlock(String name, Block blockPlaced, boolean saveConfig) {
         final CustomBlock block;
-        switch (itemInHand.getItemMeta().getDisplayName()) {
+        switch (name) {
             case "Coffee Grinder":
                 block = new CoffeeGrinder(this, blockPlaced);
                 break;
@@ -40,8 +48,13 @@ public class BlockManager {
         }
         blockLocations.put(blockPlaced.getLocation(), block);
         blockActivators.put(block.getActivatorLocation(), block);
-        getConfig().set(locationString(blockPlaced.getLocation()), itemInHand.getItemMeta().getDisplayName());
-        saveConfig();
+        if (saveConfig) {
+            final ConfigurationSection config = getConfig();
+            config.set(locationString(blockPlaced.getLocation()) + ".name", name);
+            config.set(locationString(blockPlaced.getLocation()) + ".type", blockPlaced.getType().toString());
+            config.set(locationString(blockPlaced.getLocation()) + ".data", blockPlaced.getData());
+            saveConfig();
+        }
         return false;
     }
 
@@ -66,6 +79,12 @@ public class BlockManager {
 
     public DevathonPlugin getPlugin() {
         return plugin;
+    }
+
+    public void disable() {
+        for (Location location : blockLocations.keySet()) {
+            location.getBlock().setType(Material.BARRIER);
+        }
     }
 
     private ConfigurationSection getConfig() {

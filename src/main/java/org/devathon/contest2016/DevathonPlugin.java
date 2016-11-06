@@ -47,6 +47,7 @@ public class DevathonPlugin extends JavaPlugin {
     public void onDisable() {
         getLogger().info("Beep boop. Shutting down...");
         getServer().resetRecipes();
+        blockManager.disable();
         devathonConfig = null;
         devathonConfigFile = null;
     }

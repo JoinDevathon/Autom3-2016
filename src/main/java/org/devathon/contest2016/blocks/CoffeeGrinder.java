@@ -30,6 +30,8 @@ public class CoffeeGrinder extends CustomBlock {
     public CoffeeGrinder(BlockManager manager, Block block) {
         super(manager, block);
         hopper = (Hopper) block.getState();
+        block.setData((byte) 0);
+        hopper.update();
     }
 
     @Override
