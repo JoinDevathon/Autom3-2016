@@ -1,6 +1,8 @@
 package org.devathon.contest2016.blocks;
 
+import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.devathon.contest2016.BlockManager;
 
 /**
  *
@@ -8,10 +10,18 @@ import org.bukkit.block.Block;
  */
 public abstract class CustomBlock {
     
-    private final Block block;
+    protected final BlockManager manager;
+    protected final Block block;
 
-    public CustomBlock(Block block) {
+    public CustomBlock(BlockManager manager, Block block) {
+        this.manager = manager;
         this.block = block;
     }
+    
+    public abstract void destroy();
+
+    public abstract Location getActivatorLocation();
+
+    public abstract boolean activate();
 
 }

@@ -29,8 +29,7 @@ public class DevathonPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getLogger().info("Woo! Machines activate!");
-        saveDefaultConfig();
+        //saveDefaultConfig();
         saveDefaultDevathonConfig();
         
         craftingListener = new CraftingListener();
@@ -38,6 +37,7 @@ public class DevathonPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new CustomBlockListener(this), this);
         blockManager = new BlockManager(this);
         registerCraftingRecipes();
+        getLogger().info("Woo! Machines activate!");
     }
 
     @Override
