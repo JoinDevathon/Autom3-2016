@@ -6,7 +6,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
-import org.bukkit.craftbukkit.v1_10_R1.block.CraftHopper;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Lever;
@@ -19,8 +18,8 @@ import org.devathon.contest2016.recipe.CustomMaterial;
  */
 public class CoffeeGrinder extends CustomBlock {
 
-    private boolean active = false;
     private final Hopper hopper;
+    private boolean active = false;
 
     public CoffeeGrinder(BlockManager manager, Block block) {
         super(manager, block);
@@ -40,8 +39,13 @@ public class CoffeeGrinder extends CustomBlock {
     @Override
     public boolean activate() {
         final BlockState state = block.getRelative(BlockFace.UP).getState();
+
+        if (block.getRelative(BlockFace.UP).getType() != Material.LEVER) {
+            return false;
+        }
+
         final Lever lever = (Lever) state.getData();
-        if (block.getRelative(BlockFace.UP).getType() != Material.LEVER || lever.getFacing() != BlockFace.UP) {
+        if (lever.getFacing() != BlockFace.UP) {
             return false;
         }
 
