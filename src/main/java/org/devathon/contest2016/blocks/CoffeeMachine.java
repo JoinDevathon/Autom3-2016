@@ -2,15 +2,18 @@ package org.devathon.contest2016.blocks;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Furnace;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Button;
+import org.bukkit.scheduler.BukkitTask;
 import org.devathon.contest2016.BlockManager;
 import org.devathon.contest2016.recipe.CustomMaterial;
 
@@ -82,6 +85,9 @@ public class CoffeeMachine extends CustomBlock {
         button.setPowered(true);
         state.update(true);
 
+        BukkitTask task = manager.getPlugin().getServer().getScheduler().runTaskTimer(manager.getPlugin(), () -> {
+            player.getWorld().playSound(block.getLocation(), Sound.BLOCK_LAVA_POP, 0.2f, 0.5f);
+        }, 0, 1);
         manager.getPlugin().getServer().getScheduler().runTaskLater(manager.getPlugin(), () -> {
             active = false;
 
@@ -89,6 +95,10 @@ public class CoffeeMachine extends CustomBlock {
 
             button.setPowered(false);
             state.update(true);
+            task.cancel();
+            player.stopSound(Sound.BLOCK_LAVA_POP);
+            player.getNearbyEntities(50, 50, 50).stream().filter(entity -> entity.getType() == EntityType.PLAYER)
+                    .forEach(entity -> ((Player) entity).stopSound(Sound.BLOCK_LAVA_POP));
         }, time * 20);
         return true;
     }

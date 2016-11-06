@@ -2,15 +2,18 @@ package org.devathon.contest2016.blocks;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Lever;
+import org.bukkit.scheduler.BukkitTask;
 import org.devathon.contest2016.BlockManager;
 import org.devathon.contest2016.recipe.CustomMaterial;
 
@@ -84,6 +87,9 @@ public class CoffeeGrinder extends CustomBlock {
             break;
         }
 
+        BukkitTask task = manager.getPlugin().getServer().getScheduler().runTaskTimer(manager.getPlugin(), () -> {
+            player.getWorld().playSound(block.getLocation(), Sound.ENTITY_WOLF_GROWL, 0.2f, 0.5f);
+        }, 0, 1);
         manager.getPlugin().getServer().getScheduler().runTaskLater(manager.getPlugin(), () -> {
             active = false;
 
@@ -91,6 +97,10 @@ public class CoffeeGrinder extends CustomBlock {
 
             lever.setPowered(false);
             state.update(true);
+            task.cancel();
+            player.stopSound(Sound.ENTITY_WOLF_GROWL);
+            player.getNearbyEntities(50, 50, 50).stream().filter(entity -> entity.getType() == EntityType.PLAYER)
+                    .forEach(entity -> ((Player) entity).stopSound(Sound.ENTITY_WOLF_GROWL));
         }, time * 20);
         return true;
     }
@@ -116,7 +126,7 @@ public class CoffeeGrinder extends CustomBlock {
                 return;
             }
         }
-        
+
         hopper.getWorld().dropItem(hopper.getLocation().clone().add(0.5, -0.5, 0.5), item);
     }
 

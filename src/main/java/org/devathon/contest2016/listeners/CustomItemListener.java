@@ -1,5 +1,6 @@
 package org.devathon.contest2016.listeners;
 
+import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -53,6 +54,7 @@ public class CustomItemListener implements Listener {
             event.getPlayer().getInventory().remove(event.getItem());
         }
         event.getPlayer().updateInventory();
+        event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.ENTITY_GENERIC_DRINK, 1, 1);
     }
 
 }
