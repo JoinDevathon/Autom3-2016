@@ -49,9 +49,11 @@ public class CoffeeMachine extends CustomBlock {
     public boolean activate(Player player, ItemStack item) {
         if (CustomMaterial.MUG.equals(item)) {
             final int amount = item.getAmount();
-            item.setAmount(amount - 1);
             if (amount == 1) {
                 player.getInventory().setItemInMainHand(null);
+                player.updateInventory();
+            } else {
+                item.setAmount(amount - 1);
             }
             ItemStack fuel = furnace.getInventory().getFuel();
             if (fuel == null) {

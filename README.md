@@ -1,3 +1,61 @@
+# Coffee
+
+Coffee is a plugin that adds coffee to minecraft.
+
+## Recipes
+
+First a coffee bean:
+![Coffee Bean](http://imgur.com/v38dfRN)
+
+Second a coffee grinder:
+![Coffee Grinder](http://imgur.com/zdftl6z)
+
+Third a coffee machine:
+![Coffee Machine](http://imgur.com/pOcZyGy)
+
+And finally a mug:
+![Mug](http://imgur.com/oqJTlMH)
+
+## Creating coffee
+
+Place a Coffee Grinder with a lever on top
+![Grinding](http://imgur.com/MKwpxM2)
+
+Throw a Coffee Bean on top
+![Grinding](http://imgur.com/HsR0a2m)
+
+Flip the lever
+![Grinding](http://imgur.com/7k3mQ8K)
+
+Wait a bit, and out pops a bit of ground up coffee
+![Grinding](http://imgur.com/MrsiFZ4)
+
+Next place a Coffee Machine with a button on the front
+![Coffee](http://imgur.com/CdkNQiE)
+
+Take a Mug
+![Coffee](http://imgur.com/whvCErg)
+
+Right click on the button with the Mug
+![Coffee](http://imgur.com/pvDXPes)
+
+Place a bit of ground coffee beans in the top slot
+![Coffee](http://imgur.com/zxCSn4C)
+
+Now press the button
+![Coffee](http://imgur.com/bUFmvVr)
+![Coffee](http://imgur.com/gLLechJ)
+
+Out comes nice warm Coffee
+![Coffee](http://imgur.com/OKYs6QF)
+
+Drink it while it's hot!
+![Coffee](http://imgur.com/eR0mJH4)
+
+It hold a bunch of 'charges'
+![Coffee](http://imgur.com/NFNqGw2)
+
+
 # Devathon Project
 This is the base layout for your Devathon Project. It includes several scripts to make running incredibly easy on Windows, Mac, and Linux.
 
