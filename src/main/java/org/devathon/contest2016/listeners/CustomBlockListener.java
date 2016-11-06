@@ -1,19 +1,20 @@
 package org.devathon.contest2016.listeners;
 
 import java.util.List;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.devathon.contest2016.DevathonPlugin;
 import org.devathon.contest2016.blocks.CoffeeGrinder;
 import org.devathon.contest2016.blocks.CustomBlock;
-import org.devathon.contest2016.recipe.CustomMaterial;
 
 /**
  *
@@ -56,7 +57,7 @@ public class CustomBlockListener implements Listener {
             return;
         }
 
-        event.setCancelled(block.activate());
+        event.setCancelled(block.activate(event.getPlayer(), event.getItem()));
     }
 
     @EventHandler
@@ -68,6 +69,19 @@ public class CustomBlockListener implements Listener {
         CustomBlock customBlock = plugin.getBlockManager().getCustomBlock(((Hopper) event.getInventory().getHolder()).getBlock().getLocation());
         if (customBlock != null && customBlock instanceof CoffeeGrinder) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (!(event.getInventory().getHolder() instanceof BlockState)) {
+            return;
+        }
+
+        BlockState state = (BlockState) event.getInventory().getHolder();
+        CustomBlock customBlock = plugin.getBlockManager().getCustomBlock(state.getBlock().getLocation());
+        if (customBlock != null) {
+            event.setCancelled(customBlock.inventoryClick(event));
         }
     }
 

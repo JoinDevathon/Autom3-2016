@@ -7,6 +7,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Lever;
 import org.devathon.contest2016.BlockManager;
@@ -18,6 +20,7 @@ import org.devathon.contest2016.recipe.CustomMaterial;
  */
 public class CoffeeGrinder extends CustomBlock {
 
+    private static final int time = 1;
     private final Hopper hopper;
     private boolean active = false;
 
@@ -37,7 +40,7 @@ public class CoffeeGrinder extends CustomBlock {
     }
 
     @Override
-    public boolean activate() {
+    public boolean activate(Player player, ItemStack unused) {
         final BlockState state = block.getRelative(BlockFace.UP).getState();
 
         if (block.getRelative(BlockFace.UP).getType() != Material.LEVER) {
@@ -64,7 +67,6 @@ public class CoffeeGrinder extends CustomBlock {
                 continue;
             }
 
-            System.out.println(CustomMaterial.COFFEE_BEAN.equals(item.getItemStack()));
             if (!CustomMaterial.COFFEE_BEAN.equals(item.getItemStack())) {
                 continue;
             }
@@ -89,7 +91,12 @@ public class CoffeeGrinder extends CustomBlock {
 
             lever.setPowered(false);
             state.update(true);
-        }, 20);
+        }, time * 20);
+        return true;
+    }
+
+    @Override
+    public boolean inventoryClick(InventoryClickEvent event) {
         return true;
     }
 
@@ -103,12 +110,14 @@ public class CoffeeGrinder extends CustomBlock {
         hopper.getInventory().remove(bean);
 
         final CustomBlock customBlock = manager.getCustomBlock(hopper.getBlock().getRelative(BlockFace.DOWN).getLocation());
-        if (customBlock == null || !(customBlock instanceof CoffeeMachine)) {
-            hopper.getWorld().dropItem(hopper.getLocation().clone().add(0.5, -0.5, 0.5), item);
-        } else {
+        if (customBlock != null && customBlock instanceof CoffeeMachine) {
             CoffeeMachine coffeeMachine = (CoffeeMachine) customBlock;
-            coffeeMachine.pass(item);
+            if (coffeeMachine.pass(item)) {
+                return;
+            }
         }
+        
+        hopper.getWorld().dropItem(hopper.getLocation().clone().add(0.5, -0.5, 0.5), item);
     }
 
 }

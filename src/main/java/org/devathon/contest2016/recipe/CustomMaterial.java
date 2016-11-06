@@ -21,10 +21,9 @@ public enum CustomMaterial {
     COFFEE_BEAN(Material.INK_SACK, 3, "Coffee Bean", true),
     COFFEE_GRINDER(Material.HOPPER, 0, "Coffee Grinder", true),
     COFFEE_MACHINE(Material.FURNACE, 0, "Coffee Machine", true),
-    COFFEE_MUG(Material.FLOWER_POT_ITEM, 0, "Coffee Mug", true),
+    MUG(Material.FLOWER_POT_ITEM, 0, "Mug", true),
     GROUND_COFFEE_BEANS(Material.MELON_SEEDS, 0, "Ground Coffee Beans", true),
-    COFFEE(Material.FLOWER_POT_ITEM, 0, "Coffee", false)
-    ;
+    COFFEE(Material.FLOWER_POT_ITEM, 0, "Coffee", false);
 
     private final Material material;
     private final short datavalue;
@@ -43,13 +42,14 @@ public enum CustomMaterial {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
         meta.setLore(Arrays.asList(ChatColor.DARK_AQUA + "Devathon item"));
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        item.setItemMeta(meta);
         if (!stackable) {
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            item.setItemMeta(meta);
             net.minecraft.server.v1_10_R1.ItemStack copy = CraftItemStack.asNMSCopy(item);
             copy.a("generic.luck", new AttributeModifier(UUID.randomUUID(), "generic.luck", 0, 0), EnumItemSlot.MAINHAND);
             return CraftItemStack.asBukkitCopy(copy);
         }
+        item.setItemMeta(meta);
         return item;
     }
 
@@ -67,8 +67,8 @@ public enum CustomMaterial {
 
     public boolean equals(ItemStack item) {
         return (item != null && item.getItemMeta() != null && item.getType() == this.getMaterial() && item.getDurability() == this.getDatavalue()
-                && item.getItemMeta().getDisplayName().equals(this.getName()) && item.getItemMeta().getLore() != null && !item.getItemMeta().getLore().isEmpty()
-                && item.getItemMeta().getLore().get(0).equals(DevathonPlugin.NAME));
+                && item.getItemMeta().getDisplayName() != null && item.getItemMeta().getDisplayName().startsWith(this.getName()) && item.getItemMeta().getLore() != null
+                && !item.getItemMeta().getLore().isEmpty() && item.getItemMeta().getLore().get(0).equals(DevathonPlugin.NAME));
     }
 
 }

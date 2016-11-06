@@ -32,7 +32,7 @@ public class CraftingListener implements Listener {
     public void onPrepareItemCraft(PrepareItemCraftEvent event) {
         boolean customCraft = false;
 
-        for (ItemStack item : event.getInventory()) {
+        for (ItemStack item : event.getInventory().getMatrix()) {
             if (item == null || item.getItemMeta() == null) {
                 continue;
             }
@@ -51,7 +51,7 @@ public class CraftingListener implements Listener {
         for (CustomShapelessRecipe shapelessRecipe : shapelessRecipes) {
             final Map<ItemStack, Integer> amounts = shapelessRecipe.getIngredientAmounts();
 
-            for (ItemStack item : event.getInventory()) {
+            for (ItemStack item : event.getInventory().getMatrix()) {
                 Integer amount = amounts.get(item);
                 if (amount == null) {
                     continue;
@@ -59,7 +59,7 @@ public class CraftingListener implements Listener {
                 amount -= item.getAmount();
                 amounts.put(item, amount);
             }
-
+            
             for (Integer value : amounts.values()) {
                 if (value > 0) {
                     continue outer;
